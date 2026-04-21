@@ -642,7 +642,16 @@ public class ContainerDetailFragment extends Fragment {
 
     private void loadWineVersionSpinner(final View view, Spinner sWineVersion, final ArrayList<WineInfo> wineInfos) {
         final Context context = getContext();
-        sWineVersion.setEnabled(!isEditMode());
+        
+        // 编辑模式下禁用并灰显 Wine 版本选择器
+        if (isEditMode()) {
+            sWineVersion.setEnabled(false);
+            sWineVersion.setAlpha(0.5f); // 半透明效果，保持边框
+        } else {
+            sWineVersion.setEnabled(true);
+            sWineVersion.setAlpha(1.0f); // 正常不透明
+        }
+        
         view.findViewById(R.id.LLWineVersion).setVisibility(View.VISIBLE);
         
         ArrayList<String> wineVersions = new ArrayList<>();
