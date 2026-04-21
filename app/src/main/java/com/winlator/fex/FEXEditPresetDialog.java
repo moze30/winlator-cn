@@ -30,7 +30,7 @@ public class FEXEditPresetDialog extends ContentDialog {
     private Runnable onConfirmCallback;
 
     public FEXEditPresetDialog(@NonNull Context context, String presetId) {
-        super(context, R.layout.box64_edit_preset_dialog);
+        super(context, R.layout.fex_edit_preset_dialog);
         this.context = context;
         preset = presetId != null ? FEXPresetManager.getPreset(context, presetId) : null;
         readonly = preset != null && !preset.isCustom();

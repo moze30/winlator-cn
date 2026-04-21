@@ -48,6 +48,9 @@ import com.winlator.core.GeneralComponents;
 import com.winlator.core.StringUtils;
 import com.winlator.core.WineInfo;
 import com.winlator.core.WineInstaller;
+import com.winlator.fex.FEXEditPresetDialog;
+import com.winlator.fex.FEXPreset;
+import com.winlator.fex.FEXPresetManager;
 import com.winlator.widget.ColorPickerView;
 import com.winlator.widget.LogView;
 import com.winlator.widget.SeekBar;
@@ -117,6 +120,9 @@ public class SettingsFragment extends Fragment {
 
         final Spinner sBox64Preset = view.findViewById(R.id.SBox64Preset);
         loadBox64PresetSpinner(view, sBox64Preset);
+
+        final Spinner sFEXPreset = view.findViewById(R.id.SFEXPreset);
+        loadFEXPresetSpinner(view, sFEXPreset);
 
         final RadioGroup rgAppTheme = view.findViewById(R.id.RGAppTheme);
         final int oldAppThemeId = preferences.getInt("app_theme", APP_THEME_DARK) == APP_THEME_DARK ? R.id.RBDark : R.id.RBLight;
@@ -196,6 +202,7 @@ public class SettingsFragment extends Fragment {
             SharedPreferences.Editor editor = preferences.edit();
             editor.putString("soundfont", sSoundFont.getSelectedItem().toString());
             editor.putString("box64_preset", Box64PresetManager.getSpinnerSelectedId(sBox64Preset));
+            editor.putString("fex_preset", FEXPresetManager.getSpinnerSelectedId(sFEXPreset));
             editor.putBoolean("move_cursor_to_touchpoint", cbMoveCursorToTouchpoint.isChecked());
             editor.putBoolean("capture_pointer_on_external_mouse", cbCapturePointerOnExternalMouse.isChecked());
             editor.putFloat("cursor_speed", sbCursorSpeed.getValue() / 100.0f);
@@ -280,6 +287,43 @@ public class SettingsFragment extends Fragment {
             }
             ContentDialog.confirm(context, R.string.do_you_want_to_remove_this_preset, () -> {
                 Box64PresetManager.removePreset(context, presetId);
+                updateSpinner.run();
+            });
+        });
+    }
+
+    private void loadFEXPresetSpinner(View view, final Spinner sFEXPreset) {
+        final Context context = getContext();
+
+        Runnable updateSpinner = () -> {
+            FEXPresetManager.loadSpinner(sFEXPreset, preferences.getString("fex_preset", FEXPreset.COMPATIBILITY));
+        };
+
+        updateSpinner.run();
+
+        view.findViewById(R.id.BTAddFEXPreset).setOnClickListener((v) -> {
+            FEXEditPresetDialog dialog = new FEXEditPresetDialog(context, null);
+            dialog.setOnConfirmCallback(updateSpinner);
+            dialog.show();
+        });
+        view.findViewById(R.id.BTEditFEXPreset).setOnClickListener((v) -> {
+            FEXEditPresetDialog dialog = new FEXEditPresetDialog(context, FEXPresetManager.getSpinnerSelectedId(sFEXPreset));
+            dialog.setOnConfirmCallback(updateSpinner);
+            dialog.show();
+        });
+        view.findViewById(R.id.BTDuplicateFEXPreset).setOnClickListener((v) -> {
+            FEXPresetManager.duplicatePreset(context, FEXPresetManager.getSpinnerSelectedId(sFEXPreset));
+            updateSpinner.run();
+            sFEXPreset.setSelection(sFEXPreset.getCount()-1);
+        });
+        view.findViewById(R.id.BTRemoveFEXPreset).setOnClickListener((v) -> {
+            final String presetId = FEXPresetManager.getSpinnerSelectedId(sFEXPreset);
+            if (!presetId.startsWith(FEXPreset.CUSTOM)) {
+                AppUtils.showToast(context, R.string.you_cannot_remove_this_preset);
+                return;
+            }
+            ContentDialog.confirm(context, R.string.do_you_want_to_remove_this_preset, () -> {
+                FEXPresetManager.removePreset(context, presetId);
                 updateSpinner.run();
             });
         });
