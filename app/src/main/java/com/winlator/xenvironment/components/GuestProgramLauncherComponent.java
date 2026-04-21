@@ -140,6 +140,10 @@ public class GuestProgramLauncherComponent extends EnvironmentComponent {
         // 检测 Wine 架构
         WineInfo wineInfo = WineInfo.fromIdentifier(environment.getContext(), wineVersion);
         boolean isArm64EC = wineInfo != null && "arm64ec".equals(wineInfo.getArch());
+        android.util.Log.d("Winlator", "Wine version: " + wineVersion);
+        android.util.Log.d("Winlator", "Wine info: " + (wineInfo != null ? wineInfo.identifier() : "null"));
+        android.util.Log.d("Winlator", "Wine arch: " + (wineInfo != null ? wineInfo.getArch() : "null"));
+        android.util.Log.d("Winlator", "Is arm64ec: " + isArm64EC);
 
         if (!isArm64EC) {
             // x86_64: 使用 Box64（原始逻辑）
@@ -169,7 +173,8 @@ public class GuestProgramLauncherComponent extends EnvironmentComponent {
             envVars.put("BOX64_LD_LIBRARY_PATH", rootDir+"/lib/x86_64-linux-gnu");
         } else {
             // arm64ec: 参考 glibc 项目设置特殊的库路径
-            File wineDirAbs = new File(rootDir, rootFS.getWinePath().substring(1));
+            String wp = winePath; // 已经处理过，确保不以 / 开头
+            File wineDirAbs = new File(rootDir, wp);
             File wineLibDirAbs = new File(wineDirAbs, "lib");
             File wineUnixLibDir = new File(wineLibDirAbs, "wine/aarch64-unix");
             ldLibraryPath = wineUnixLibDir.getPath() + ":" + wineLibDirAbs.getPath() + ":" + rootFS.getLibDir().getPath();
