@@ -129,18 +129,6 @@
                 ]
     },
     {
-    "name": "Hud & Dxvk Config",
-    "children": [
-        {
-            "name": "dxvk.conf",
-            "path": "Z:\\opt\\apps\\AkelPad.exe",
-            "cmdArgs": "Z:\\home\\xuser\\.config\\dxvk.conf",
-            "iconLocation": "Z:\\opt\\apps\\AkelPad.exe",
-            "iconIndex": 0
-        }
-    ]
-},
-    {
                 "name" : "Red Alert 2 Patch",
                 "children" : [
                     {

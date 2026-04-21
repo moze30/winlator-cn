@@ -243,6 +243,14 @@ public class ContainerDetailFragment extends Fragment {
                 String screenSize = getScreenSize(view);
                 String envVars = envVarsView.getEnvVars();
                 String graphicsDriver = graphicsDriverPicker.getGraphicsDriver();
+                
+                // 如果使用 Vortek 驱动，强制禁用 MangoHud
+                if (graphicsDriver.startsWith(GraphicsDrivers.VORTEK)) {
+                    EnvVars env = new EnvVars(envVars);
+                    env.put("MANGOHUD", "0");
+                    envVars = env.toString();
+                }
+                
                 String dxwrapper = dxwrapperPicker.getDXWrapper();
                 String dxwrapperConfig = dxwrapperPicker.getDXWrapperConfig();
                 String graphicsDriverConfig = graphicsDriverPicker.getGraphicsDriverConfig();
