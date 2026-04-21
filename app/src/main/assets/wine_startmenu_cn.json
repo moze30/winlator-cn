@@ -132,35 +132,7 @@
     "name": "Hud&Dxvk配置",
     "children": [
         {
-            "name": "1、mangohud1.conf",
-            "path": "Z:\\opt\\apps\\AkelPad.exe",
-            "cmdArgs": "Z:\\home\\mangohud1.conf",
-            "iconLocation": "Z:\\opt\\apps\\AkelPad.exe",
-            "iconIndex": 0
-        },
-        {
-            "name": "2、mangohud2.conf(默认)",
-            "path": "Z:\\opt\\apps\\AkelPad.exe",
-            "cmdArgs": "Z:\\home\\mangohud2.conf",
-            "iconLocation": "Z:\\opt\\apps\\AkelPad.exe",
-            "iconIndex": 0
-        },
-        {
-            "name": "3、mangohud3.conf",
-            "path": "Z:\\opt\\apps\\AkelPad.exe",
-            "cmdArgs": "Z:\\home\\mangohud3.conf",
-            "iconLocation": "Z:\\opt\\apps\\AkelPad.exe",
-            "iconIndex": 0
-        },
-        {
-            "name": "4、mangohud4.conf",
-            "path": "Z:\\opt\\apps\\AkelPad.exe",
-            "cmdArgs": "Z:\\home\\mangohud4.conf",
-            "iconLocation": "Z:\\opt\\apps\\AkelPad.exe",
-            "iconIndex": 0
-        },
-        {
-            "name": "5、dxvk.conf",
+            "name": "dxvk.conf",
             "path": "Z:\\opt\\apps\\AkelPad.exe",
             "cmdArgs": "Z:\\home\\xuser\\.config\\dxvk.conf",
             "iconLocation": "Z:\\opt\\apps\\AkelPad.exe",
