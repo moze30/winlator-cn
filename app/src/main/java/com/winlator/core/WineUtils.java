@@ -395,4 +395,16 @@ public abstract class WineUtils {
         registryEditor.setStringValues("Software\\Microsoft\\Windows\\CurrentVersion\\Fonts", wineFonts);
         registryEditor.setStringValues("Software\\Microsoft\\Windows NT\\CurrentVersion\\Fonts", wineFonts);
     }
+
+    public static void setDirect3DLibOverrides(Container container, boolean useNative) {
+        final String[] direct3dLibs = {"d3d8", "d3d9", "d3d10", "d3d10_1", "d3d10core", "d3d11", "d3d12", "d3d12core", "ddraw", "dxgi", "wined3d"};
+        final String dllOverridesKey = "Software\\Wine\\DllOverrides";
+        File userRegFile = new File(container.getRootDir(), ".wine/user.reg");
+        try (WineRegistryEditor registryEditor = new WineRegistryEditor(userRegFile)) {
+            for (String name : direct3dLibs) {
+                if (useNative) registryEditor.setStringValue(dllOverridesKey, name, "native,builtin");
+                else registryEditor.setStringValue(dllOverridesKey, name, "builtin");
+            }
+        }
+    }
 }

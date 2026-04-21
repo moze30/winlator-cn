@@ -9,9 +9,7 @@ import android.widget.Spinner;
 import com.winlator.R;
 import com.winlator.container.DXWrappers;
 import com.winlator.core.AppUtils;
-import com.winlator.core.DefaultVersion;
 import com.winlator.core.EnvVars;
-import com.winlator.core.GeneralComponents;
 import com.winlator.core.KeyValueSet;
 import com.winlator.core.StringUtils;
 import com.winlator.widget.GPUCardAdapter;
@@ -27,14 +25,10 @@ public class WineD3DConfigDialog extends ContentDialog {
         setIcon(R.drawable.icon_display_settings);
         setTitle("WineD3D "+context.getString(R.string.configuration));
 
-        final Spinner sVersion = findViewById(R.id.SVersion);
         final Spinner sDDrawWrapper = findViewById(R.id.SDDrawWrapper);
         final Spinner sRenderer = findViewById(R.id.SRenderer);
 
         KeyValueSet config = new KeyValueSet(anchor.getTag());
-
-        String version = config.get("version");
-        GeneralComponents.initViews(GeneralComponents.Type.WINED3D, findViewById(R.id.WineD3DToolbox), sVersion, version, DefaultVersion.WINED3D);
 
         AppUtils.setSpinnerSelectionFromIdentifier(sDDrawWrapper, config.get("ddrawWrapper", DXWrappers.WINED3D));
         AppUtils.setSpinnerSelectionFromIdentifier(sRenderer, config.get("renderer", "gl"));
@@ -61,7 +55,6 @@ public class WineD3DConfigDialog extends ContentDialog {
 
         setOnConfirmCallback(() -> {
             KeyValueSet newConfig = new KeyValueSet();
-            newConfig.put("version", sVersion.getSelectedItem().toString());
             newConfig.put("csmt", cbCSMT.isChecked() ? "3" : "0");
 
             String ddrawWrapper = StringUtils.parseIdentifier(sDDrawWrapper.getSelectedItem());

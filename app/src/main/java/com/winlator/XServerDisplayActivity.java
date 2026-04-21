@@ -865,7 +865,7 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
         }
         else if (dxwrapper.equals(DXWrappers.WINED3D)) {
             WineD3DConfigDialog.setEnvVars(dxwrapperConfig[0], envVars);
-            cacheId += dxwrapper+"-"+dxwrapperConfig[0].get("version", DefaultVersion.WINED3D);
+            cacheId += dxwrapper;
         }
 
         String ddrawWrapper = dxwrapperConfig[0].get("ddrawWrapper", DXWrappers.WINED3D);
@@ -882,12 +882,25 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
         File windowsDir = new File(rootDir, RootFS.WINEPREFIX+"/drive_c/windows");
 
         if (dxwrapper.equals(DXWrappers.WINED3D)) {
-            String version = dxwrapperConfig[0].get("version", DefaultVersion.WINED3D);
-            if (version.equals(WineInfo.MAIN_WINE_VERSION)) {
-                final String[] dlls = {"d3d8.dll", "d3d9.dll", "d3d10.dll", "d3d10_1.dll", "d3d10core.dll", "d3d11.dll", "d3d12.dll", "d3d12core.dll", "dxgi.dll", "ddraw.dll", "wined3d.dll"};
-                restoreBuiltinDllFiles(dlls);
+            // 直接从当前 Wine 的安装目录复制原生 DLL
+            String nativeWindowsDir = wineInfo != null && "arm64ec".equals(wineInfo.getArch()) ? "aarch64-windows" : "x86_64-windows";
+            File wineDir = new File(rootDir, rootFS.getWinePath());
+            File wineSystem32Dir = new File(wineDir, "/lib/wine/" + nativeWindowsDir);
+            File wineSysWoW64Dir = new File(wineDir, "/lib/wine/i386-windows");
+            File containerSystem32Dir = new File(rootDir, RootFS.WINEPREFIX+"/drive_c/windows/system32");
+            File containerSysWoW64Dir = new File(rootDir, RootFS.WINEPREFIX+"/drive_c/windows/syswow64");
+            
+            final String[] d3dDlls = {"d3d11.dll", "d3d10.dll", "d3d10_1.dll", "d3d10core.dll", "dxgi.dll", "d3d9.dll", "d3d8.dll", "ddraw.dll", "wined3d.dll"};
+            
+            for (String dll : d3dDlls) {
+                // 覆盖 64位 (system32)
+                FileUtils.copy(new File(wineSystem32Dir, dll), new File(containerSystem32Dir, dll));
+                // 覆盖 32位 (syswow64)
+                FileUtils.copy(new File(wineSysWoW64Dir, dll), new File(containerSysWoW64Dir, dll));
             }
-            else GeneralComponents.extractFile(GeneralComponents.Type.WINED3D, this, version, DefaultVersion.WINED3D);
+            
+            // 设置注册表，使用 builtin DLL
+            WineUtils.setDirect3DLibOverrides(container, false);
         }
         else if (dxwrapper.equals(DXWrappers.DXVK)) {
             final boolean[] hasD3D8DllFile = {false};
@@ -908,6 +921,9 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
                 TarCompressorUtils.extract(TarCompressorUtils.Type.ZSTD, this, "dxwrapper/d8vk-"+DefaultVersion.D8VK+".tzst", windowsDir);
             }
             if (!hasD3D10DllFile[0]) restoreBuiltinDllFiles("d3d10.dll", "d3d10_1.dll");
+            
+            // 设置注册表，使用 native DLL
+            WineUtils.setDirect3DLibOverrides(container, true);
         }
 
         GeneralComponents.extractFile(GeneralComponents.Type.VKD3D, this, dxwrapperConfig[1].get("version"), DefaultVersion.VKD3D);
