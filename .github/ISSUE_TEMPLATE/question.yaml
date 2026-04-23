@@ -1,0 +1,24 @@
+name: Question
+description: Ask a question
+title: "[Question]: "
+labels: [question]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Question
+      description: |
+        Please check the README and existing issues before asking. You can also post questions in the Issues section if a Discussion tab is not available.
+    validations:
+      required: true
+  - type: dropdown
+    id: check_first
+    attributes:
+      label: Did you search for existing answers?
+      description: |
+        Please ensure your question hasn't been answered before in the [Issues](https://github.com/ZUXTUO/winlator-zmod/issues) or Wiki.
+      options:
+        - Yes, I have searched and couldn't find an answer.
+        - No, I will go search first.
+    validations:
+      required: true

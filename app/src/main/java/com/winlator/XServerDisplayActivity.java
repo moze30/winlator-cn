@@ -114,7 +114,7 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
     private InputControlsManager inputControlsManager;
     private RootFS rootFS;
     private FrameRating frameRating;
-    private Runnable editInputControlsCallback;
+    private Runnable editInputContrallback;
     private Shortcut shortcut;
     private String[] graphicsDriver = {GraphicsDrivers.DEFAULT_VULKAN_DRIVER, GraphicsDrivers.DEFAULT_OPENGL_DRIVER};
     private String audioDriver = Container.DEFAULT_AUDIO_DRIVER;
@@ -319,9 +319,9 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == MainActivity.EDIT_INPUT_CONTROLS_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            if (editInputControlsCallback != null) {
-                editInputControlsCallback.run();
-                editInputControlsCallback = null;
+            if (editInputContrallback != null) {
+                editInputContrallback.run();
+                editInputContrallback = null;
             }
         }
     }
@@ -710,7 +710,7 @@ public class XServerDisplayActivity extends AppCompatActivity implements Navigat
             Intent intent = new Intent(this, MainActivity.class);
             intent.putExtra("edit_input_controls", true);
             intent.putExtra("selected_profile_id", position > 0 ? inputControlsManager.getProfiles().get(position - 1).id : 0);
-            editInputControlsCallback = () -> {
+            editInputContrallback = () -> {
                 hideInputControls();
                 inputControlsManager.loadProfiles(true);
                 loadProfileSpinner.run();

@@ -1,0 +1,77 @@
+name: Bug Report
+description: File a bug or crash report for Winlator-Zmod
+title: "[Bug]: "
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for submitting a bug report; please fill in with as much detail as possible.
+  - type: dropdown
+    id: app_version
+    attributes:
+      label: Are you on the latest version of Winlator-Zmod?
+      description: If not, you must update first before reporting.
+      options:
+        - No, I need to download a newer version and try again.
+        - Yes, I'm on the latest release of Winlator-Zmod.
+        - Yes, I'm on a pre-release/beta build.
+    validations:
+      required: true
+  - type: textarea
+    id: device_info
+    attributes:
+      label: Device Information
+      description: Please describe your device (Model, SoC/CPU, Android version).
+      placeholder: e.g., Snapdragon 8 Gen 2, 12GB RAM, Android 13
+    validations:
+      required: true
+  - type: dropdown
+    id: category
+    attributes:
+      label: Bug Category
+      description: Which part of the app is affected?
+      options:
+        - Graphics/Drivers (Turnip, VirGL, Zink, etc.)
+        - DX Wrapper (DXVK, VKD3D, WineD3D)
+        - Input Controls / Gamepad
+        - Box86/Box64 Emulation
+        - Wine / Windows Components
+        - Container Settings / UI
+        - Game Compatibility (Specific Game Issue)
+        - Crash / Hang
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Container & Component Settings
+      description: Please provide your container settings (Graphics Driver, DX Wrapper, Wine version, Box86/Box64 version).
+      placeholder: |
+        - Graphics Driver: Turnip + Zink
+        - DX Wrapper: DXVK 2.2
+        - Wine version: 8.0.2
+        - Box64 version: 0.2.6
+    validations:
+      required: true
+  - type: textarea
+    id: what_happened
+    attributes:
+      label: Describe the issue
+      description: What happened? Should something else have happened instead? Please provide clear steps to reproduce the issue.
+      placeholder: |
+        1. Open the app
+        2. Launch container...
+        3. Run game...
+        4. App crashes during loading / Graphics are glitched
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant log output
+      description: |
+        Please provide relevant log output (Logcat or Winlator's internal logs). This is extremely helpful for debugging!
+    validations:
+      required: false
