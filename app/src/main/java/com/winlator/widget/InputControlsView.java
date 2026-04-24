@@ -368,13 +368,13 @@ public class InputControlsView extends View {
 
         if (!editMode && profile != null) {
             int actionIndex = event.getActionIndex();
-            int pointerId = event.getPointerId(actionIndex);
             int actionMasked = event.getActionMasked();
             boolean handled = false;
 
             switch (actionMasked) {
                 case MotionEvent.ACTION_DOWN:
                 case MotionEvent.ACTION_POINTER_DOWN: {
+                    int pointerId = event.getPointerId(actionIndex);
                     float x = event.getX(actionIndex);
                     float y = event.getY(actionIndex);
 
@@ -391,12 +391,13 @@ public class InputControlsView extends View {
                 }
                 case MotionEvent.ACTION_MOVE: {
                     for (byte i = 0, count = (byte)event.getPointerCount(); i < count; i++) {
+                        int pointerId = event.getPointerId(i);
                         float x = event.getX(i);
                         float y = event.getY(i);
 
                         handled = false;
                         for (ControlElement element : profile.getElements()) {
-                            if (element.handleTouchMove(i, x, y)) handled = true;
+                            if (element.handleTouchMove(pointerId, x, y)) handled = true;
                         }
                         if (!handled) touchpadView.onTouchEvent(event);
                     }
@@ -405,6 +406,7 @@ public class InputControlsView extends View {
                 case MotionEvent.ACTION_UP:
                 case MotionEvent.ACTION_POINTER_UP:
                 case MotionEvent.ACTION_CANCEL: {
+                    int pointerId = event.getPointerId(actionIndex);
                     float x = event.getX(actionIndex);
                     float y = event.getY(actionIndex);
                     for (ControlElement element : profile.getElements()) if (element.handleTouchUp(pointerId, x, y)) handled = true;

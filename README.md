@@ -8,6 +8,7 @@ Winlator-Zmod为Winlator的改版，可通过 Wine 和 Box86/Box64 运行 Window
 本仓库用于存放 Winlator 应用源码的最新更新内容。
 
 # 致谢与第三方项目
+- Hostei Mod [52emu.cn](http://52emu.cn)
 - 原仓库 [Winlator](https://github.com/brunodev85/winlator)
 - GLIBC Patches by [Termux Pacman](https://github.com/termux-pacman/glibc-packages)
 - Wine ([winehq.org](https://www.winehq.org/))
